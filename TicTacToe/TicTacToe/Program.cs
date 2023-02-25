@@ -5,372 +5,305 @@ namespace TicTacToe
 {
     class Program
     {
+        static int gamesTied = 0;
+        static int gamesComputerWon = 0;
+        static int gamesPlayerWon = 0;
+        static int computerInput = 0;
+        static int playerInput = 0;
+        static int playerTurn = 3;
+        static int computerTurn = -1;
+        static int userTurn = -1;
         static string playAgain = "y";
         static string input = "";
         static string exit = "q";
         static int turnsTaken = 0;
         static int[] board = new int[9];
+        
         static void Main(string[] args)
         {
 
-            //reset the board/array
+            //initial board generation
             for (int i = 0; i < 9; i++)
             {
                 board[i] = 0;
             }
 
-
-            int userTurn = -1;
-            int computerTurn = -1;
             Random rand = new Random();
-            int playerTurn = 3;
             string validInfo;
             bool isInRange = false;
-            int playerSymbol = 0;
-            int computerSymbol = 0;
+            string playerSymbol = "X";
+            string computerSymbol = "O";
 
-            //Working on playAgain part of program 2/8/2023
             do
             {
-
+                //anotherGame();
                 while (playerTurn == 3)
                 {
-                    Console.WriteLine("Would you like to play first or second please enter 1 or 2.");
+                    welcomeSign();
+                    playerInput = 0;
+                    Console.WriteLine(" Would you like to play first or second please enter 1 or 2.");
                     validInfo = Console.ReadLine();
-                    isInRange = int.TryParse(validInfo, out playerTurn);
-                    if (!isInRange || playerTurn < 1 || playerTurn > 2)
-                    {
-                        playerTurn = 3;
-                        Console.WriteLine("Invalid entry! ");
-                    }
-                }
-                while (playerSymbol == 0)
-                {
-                    Console.WriteLine("What symbol would you like to use press 8 for 'X' or 9 for 'O'.");
-                    validInfo = Console.ReadLine();
-                    isInRange = int.TryParse(validInfo, out playerSymbol);
-                    if (!isInRange || playerSymbol < 8 || playerSymbol > 9)
-                    {
-                        playerSymbol = 0;
-                        Console.WriteLine("Invalid entry! ");
-                    }
-                    if (playerSymbol == 8)
-                    {
-                        computerSymbol = 9;
-                    }
-                    else
-                    {
-                        computerSymbol = 8;
-                    }
-
-                }
-
-
-                while (checkForWinner() == 0)
-                {
-                    if (playerTurn == 1)
-                    {
-                        while (userTurn == -1 || board[userTurn] != 0 && exit != input)
+                        isInRange = int.TryParse(validInfo, out playerTurn);
+                        while (!isInRange || playerTurn < 1 || playerTurn > 2)
                         {
-                            bool isNumber = false;
-                            while (!isNumber)
-                            {
-                                if (checkForWinner() != 0)
-                                {
-                                    printBoard();
-                                    //Console.WriteLine("Player " + checkForWinner() + " wins!");
-                                    Console.WriteLine("Computer wins!1");
-                                    anotherGame();
-                                    //return;
-                                }
+                            playerTurn = 3;
+                            Console.WriteLine(" Invalid entry! ");
+                            Console.WriteLine(" Would you like to play first or second please enter 1 or 2.");
+                            validInfo = Console.ReadLine();
+                            isInRange = int.TryParse(validInfo, out playerTurn);
+                        }
+                    
+                    while (playerInput == 0)
+                    {
+                        Console.WriteLine(" What symbol would you like to use press 8 for 'X' or 9 for 'O'.");
+                        validInfo = Console.ReadLine();
+                        isInRange = int.TryParse(validInfo, out playerInput);
+                        while (!isInRange || playerInput <= 7 || playerInput >= 10)
+                        {
+                            playerInput = 0;
+                            Console.WriteLine(" Invalid entry! ");
+                            Console.WriteLine(" What symbol would you like to use press 8 for 'X' or 9 for 'O'.");
+                            validInfo = Console.ReadLine();
+                            isInRange = int.TryParse(validInfo, out playerInput);
+                        }
+                        if (playerInput == 8)
+                        {
+                            computerInput = 9;
+                        }
+                        else
+                        {
+                            computerInput = 8;
+                        }
 
-                                if (checkForDraw() == 3)
+                        if (playerInput == 8)
+                        {
+                            playerSymbol = "X";
+                            computerSymbol = "O";
+                        }
+                        else
+                        {
+                            playerSymbol = "O";
+                            computerSymbol = "X";
+                        }
+                        Console.Clear();
+
+
+                        while (checkForWinner() == 0 && playerInput == 8 || playerInput == 9)
+                        {
+                            Console.WriteLine(" ");
+                            Console.WriteLine(" USER symbol: " + playerSymbol + "          SYSTEM symbol: " + computerSymbol);
+                            Console.WriteLine(" ");
+                            printKeyBoard();
+                            if (playerTurn == 1)
+                            {
+                                while (userTurn == -1 || board[userTurn] != 0 && exit != input)
                                 {
-                                    Console.WriteLine("Game Ends in Draw.");
-                                    printBoard();
-                                    anotherGame();
-                                    if (playAgain == "n")
+
+                                    bool isNumber = false;
+                                    while (!isNumber)
                                     {
-                                        return;
+                                        if (checkForWinner() != 0)
+                                        {
+                                            printBoard();
+                                            Console.WriteLine(" ");
+                                            Console.WriteLine(" Computer wins!");
+                                            gamesComputerWon++;
+                                            Console.WriteLine(" ");
+                                            anotherGame();
+                                            if (playAgain == "n")
+                                            {
+                                                endGameResults();
+                                                return;
+                                            }
+                                        }
+
+                                        if (checkForDraw() == 3)
+                                        {
+                                            printBoard();
+                                            Console.WriteLine(" ");
+                                            Console.WriteLine(" Game Ends in Draw.");
+                                            gamesTied++;
+                                            Console.WriteLine(" ");
+                                            anotherGame();
+                                            if (playAgain == "n")
+                                            {
+                                                endGameResults();
+                                                return;
+                                            }
+                                        }
+                                        if (checkForWinner() == 0)
+                                        {
+                                            isNumber = true;
+                                            Console.WriteLine(" Please enter a number from 0 to 8 or press the q key and enter to exit.");
+                                            input = Console.ReadLine();
+                                            if (exit == input.ToLower())
+                                            {
+                                                endGameResults();
+                                                return;
+                                            }
+                                            isNumber = int.TryParse(input, out userTurn);
+                                            while (!isNumber || userTurn < 0 || userTurn > 8)
+                                            {
+                                                userTurn = -1;
+                                                Console.WriteLine(" Invalid entry! ");
+                                                Console.WriteLine(" Please enter a number from 0 to 8 or press the q key and enter to exit.");
+                                                input = Console.ReadLine();
+                                                isNumber = int.TryParse(input, out userTurn);
+                                                if (exit == input.ToLower())
+                                                {
+                                                    endGameResults();
+                                                    return;
+                                                }
+                                            }
+                                            while (board[userTurn] != 0)
+                                            {
+                                                Console.WriteLine(" ");
+                                                Console.WriteLine(" Space " + userTurn +" is already occupied, try again");
+                                                Console.WriteLine(" ");
+                                                Console.WriteLine(" Please enter a number from 0 to 8 or press the q key and enter to exit.");
+                                                input = Console.ReadLine();
+                                                if (exit == input.ToLower())
+                                                {
+                                                    endGameResults();
+                                                    return;
+                                                }
+                                                isNumber = int.TryParse(input, out userTurn);
+                                            }
+                                        }
                                     }
                                 }
                                 if (checkForWinner() == 0)
                                 {
-                                    isNumber = true;
-                                    Console.WriteLine("Please enter a number from 0 to 8 or press the q key and enter to exit.");
-                                    input = Console.ReadLine();
+                                    Console.WriteLine(" You typed " + userTurn);
+                                    board[userTurn] = playerInput;
+                                    printBoard();
+                                    turnsTaken++;
+                                    playerTurn++;
                                 }
-                                if (exit == input.ToLower())
-                                {
-                                    return;
-                                }
-                                if (checkForWinner() == 0)
-                                {
-                                    isNumber = int.TryParse(input, out userTurn);
-                                }
-                                if (!isNumber || userTurn < 0 || userTurn > 8)
-                                {
-                                    userTurn = -1;
-                                    Console.WriteLine("Invalid entry! ");
-                                }
+                                Console.Clear();
                             }
-                        }
-                        if (checkForWinner() == 0)
-                        {
-                            Console.WriteLine("You typed " + userTurn);
-                            board[userTurn] = playerSymbol;
-                            printBoard();
-                            turnsTaken++;
-                            playerTurn++;
-                        }
-                    }
-
-                    if (playerTurn == 2)
-                    {
-                        //don't allow computer to pick invalid number
-                        while (computerTurn == -1 || board[computerTurn] != 0 && exit != input)
-                        {
-                            if (checkForWinner() != 0)
+                            if (playerTurn == 2)
                             {
-                                printBoard();
-                                //Console.WriteLine("Player " + checkForWinner() + " wins!");
-                                Console.WriteLine("Player wins!");
-                                anotherGame();
-                                if (playAgain == "n")
+                                //don't allow computer to pick invalid number
+                                while (computerTurn == -1 || board[computerTurn] != 0 && exit != input)
                                 {
-                                    return;
+                                    if (checkForWinner() != 0)
+                                    {
+                                        printBoard();
+                                        Console.WriteLine(" ");
+                                        Console.WriteLine(" Player wins!");
+                                        gamesPlayerWon++;
+                                        Console.WriteLine(" ");
+                                        anotherGame();
+                                        if (playAgain == "n")
+                                        {
+                                            endGameResults();
+                                            return;
+                                        }
+                                    }
+                                    if (checkForDraw() == 3)
+                                    {
+                                        Console.Clear();
+                                        printBoard();
+                                        Console.WriteLine(" ");
+                                        Console.WriteLine(" Game Ends in Draw.");
+                                        gamesTied++;
+                                        Console.WriteLine(" ");
+                                        anotherGame();
+                                        if (playAgain == "n")
+                                        {
+                                            endGameResults();
+                                            return;
+                                        }
+                                    }
+                                    if (checkForWinner() == 0 && computerInput == 8 || computerInput == 9)
+                                    {
+                                        computerTurn = rand.Next(9);
+                                        Console.WriteLine(" Computer chooses " + computerTurn);
+                                    }
+                                }
+                                if (checkForWinner() == 0 && computerInput == 8 || computerInput == 9)
+                                {
+                                    board[computerTurn] = computerInput;
+                                    turnsTaken++;
+                                }
+                                if (checkForWinner() != 0)
+                                {
+                                    printBoard();
+                                    Console.WriteLine(" ");
+                                    Console.WriteLine(" Computer wins!");
+                                    gamesComputerWon++;
+                                    Console.WriteLine(" ");
+                                    anotherGame();
+                                    if (playAgain == "n")
+                                    {
+                                        endGameResults();
+                                        return;
+                                    }
+                                }
+                                if (checkForWinner() == 0 && computerInput == 8 || computerInput == 9)
+                                {
+                                    printBoard();
+                                    playerTurn--;
                                 }
                             }
-                            if (checkForDraw() == 3)
-                            {
-                                Console.WriteLine("Game Ends in Draw.");
-                                printBoard();
-                                anotherGame();
-                                if (playAgain == "n")
-                                {
-                                    return;
-                                }
-                            }
-                            if (checkForWinner() == 0)
-                            {
-                                computerTurn = rand.Next(9);
-                                Console.WriteLine("Computer chooses " + computerTurn);
-                            }
-                        }
-                        if (checkForWinner() == 0)
-                        {
-                            board[computerTurn] = computerSymbol;
-                            turnsTaken++;
-                        }
-                        if (checkForWinner() != 0)
-                        {
-                            printBoard();
-                            Console.WriteLine("Computer wins!");
-                            anotherGame();
-                            if (playAgain == "n")
-                            {
-                                return;
-                            }
-                        }
-                        if (checkForWinner() == 0)
-                        {
-                            printBoard();
-                            playerTurn--;
                         }
                     }
                 }
-                /**Console.WriteLine("Would you like to play again? y/n ");
-                input = Console.ReadLine();
-                playAgain = input.ToLower();**/
             } while (playAgain == "y");
         }
-        private static void endGame()
-        {
-            if (exit == input.ToLower())
-            {
-                return;
-            }
-        }
 
+        private static void welcomeSign()
+        {
+            Console.WriteLine(" ");
+            Console.WriteLine("   **********    Welcome to Tic Tac Toe!    ************");
+            Console.WriteLine("   **                                                 **");
+            Console.WriteLine("   **        XX   XX        OOO        XX   XX        **");
+            Console.WriteLine("   **         XX XX       OO   OO       XX XX         **");
+            Console.WriteLine("   **           X        OO     OO        X           **");
+            Console.WriteLine("   **         XX XX       OO   OO       XX XX         **");
+            Console.WriteLine("   **        XX   XX        OOO        XX   XX        **");
+            Console.WriteLine("   **                                                 **");
+            Console.WriteLine("   *****************************************************");
+            Console.WriteLine(" ");
+        }
+        private static void endGameResults()
+        {
+            Console.WriteLine(" ");
+            Console.WriteLine("*********************************************************************");
+            Console.WriteLine("* Player Won " + gamesPlayerWon + " Game(s) || Computer Won " + gamesComputerWon + " Game(s) ||  Game(s) Tied " + gamesTied + " *");
+            Console.WriteLine("*********************************************************************");
+            Console.WriteLine(" Total Games Played: " + (gamesPlayerWon + gamesComputerWon + gamesTied));
+            Console.WriteLine(" ");
+            Console.WriteLine(" Press any key to exit...");
+            Console.ReadKey();
+        }
         private static void resetGameBoard()
         {
             for (int i = 0; i < 9; i++)
             {
                 board[i] = 0;
             }
+            Console.Clear();
+            turnsTaken = 0;
+            userTurn = -1;
+            computerTurn = 0;
+            playerTurn = 3;
+            playerInput = -1;
+            computerInput = 0;
+            Console.WriteLine(" ");
+            Console.WriteLine("                         *NEW GAME*");
         }
-
-        /**private static string runGame()
-        {
-            //while (playAgain == "y")
-            //{
-                int userTurn = -1;
-                int computerTurn = -1;
-                Random rand = new Random();
-                int playerTurn = 3;
-                string validInfo;
-                bool isInRange = false;
-                int playerSymbol = 0;
-                int computerSymbol = 0;
-                while (playerTurn == 3)
-                {
-                    Console.WriteLine("Would you like to play first or second please enter 1 or 2.");
-                    validInfo = Console.ReadLine();
-                    isInRange = int.TryParse(validInfo, out playerTurn);
-                    if (!isInRange || playerTurn < 1 || playerTurn > 2)
-                    {
-                        playerTurn = 3;
-                        Console.WriteLine("Invalid entry! ");
-                    }
-                }
-                while (playerSymbol == 0)
-                {
-                    Console.WriteLine("What symbol would you like to use press 8 for 'X' or 9 for 'O'.");
-                    validInfo = Console.ReadLine();
-                    isInRange = int.TryParse(validInfo, out playerSymbol);
-                    if (!isInRange || playerSymbol < 8 || playerSymbol > 9)
-                    {
-                        playerSymbol = 0;
-                        Console.WriteLine("Invalid entry! ");
-                    }
-                    if (playerSymbol == 8)
-                    {
-                        computerSymbol = 9;
-                    }
-                    else
-                    {
-                        computerSymbol = 8;
-                    }
-
-                }
-
-
-                while (checkForWinner() == 0)
-                {
-                    if (playerTurn == 1)
-                    {
-                        while (userTurn == -1 || board[userTurn] != 0 && exit != input)
-                        {
-                            bool isNumber = false;
-                            while (!isNumber)
-                            {
-                                /**if (checkForWinner() != 0)
-                                {
-                                    printBoard();
-                                    //Console.WriteLine("Player " + checkForWinner() + " wins!");
-                                    Console.WriteLine("Computer wins!1");
-                                    anotherGame();
-                                    //return;
-                                }**/
-        /**
-                                if (checkForDraw() == 3)
-                                {
-                                    Console.WriteLine("Game Ends in Draw.");
-                                    printBoard();
-                                    anotherGame();
-                                    //if (playAgain == "n")
-                                    //{
-                                    //    return;
-                                    //}
-                                }
-                                if (checkForWinner() == 0)
-                                {
-                                    isNumber = true;
-                                    Console.WriteLine("Please enter a number from 0 to 8 or press the q key and enter to exit.");
-                                    input = Console.ReadLine();
-                                }
-                                endGame();
-                                //if (exit == input.ToLower())
-                                //{
-                                //    return;
-                                //}
-                                if (checkForWinner() == 0)
-                                {
-                                    isNumber = int.TryParse(input, out userTurn);
-                                }
-                                if (!isNumber || userTurn < 0 || userTurn > 8)
-                                {
-                                    userTurn = -1;
-                                    Console.WriteLine("Invalid entry! ");
-                                }
-                            }
-                        }
-                        if (checkForWinner() == 0)
-                        {
-                            Console.WriteLine("You typed " + userTurn);
-                            board[userTurn] = playerSymbol;
-                            printBoard();
-                            turnsTaken++;
-                            playerTurn++;
-                        }
-                    }
-
-                    if (playerTurn == 2)
-                    {
-                        //don't allow computer to pick invalid number
-                        while (computerTurn == -1 || board[computerTurn] != 0 && exit != input)
-                        {
-                            if (checkForWinner() != 0)
-                            {
-                                printBoard();
-                                //Console.WriteLine("Player " + checkForWinner() + " wins!");
-                                Console.WriteLine("Player wins!");
-                                anotherGame();
-                                //if (playAgain == "n")
-                                //{
-                                //    return;
-                                //}
-                            }
-                            if (checkForDraw() == 3)
-                            {
-                                Console.WriteLine("Game Ends in Draw.");
-                                printBoard();
-                                anotherGame();
-                                //if (playAgain == "n")
-                                //{
-                                //    return;
-                                //}
-                            }
-                            if (checkForWinner() == 0)
-                            {
-                                computerTurn = rand.Next(9);
-                                Console.WriteLine("Computer chooses " + computerTurn);
-                            }
-                        }
-                        if (checkForWinner() == 0)
-                        {
-                            board[computerTurn] = computerSymbol;
-                            turnsTaken++;
-                        }
-                        if (checkForWinner() != 0)
-                        {
-                            printBoard();
-                            Console.WriteLine("Computer wins!");
-                            anotherGame();
-                            //if (playAgain == "n")
-                            //{
-                            //    return;
-                            //}
-                        }
-                        if (checkForWinner() == 0)
-                        {
-                            printBoard();
-                            playerTurn--;
-                        }
-                    }
-                }
-            //}
-            return playAgain;
-        }**/
 
         private static string anotherGame()
         {
             bool isStringForm;
-            Console.WriteLine("Would you like to play again? y/n ");
+            Console.WriteLine(" Would you like to play again? y/n ");
             input = Console.ReadLine();
             playAgain = input.ToLower();
             if (playAgain == "y")
             {
+                resetGameBoard();
                 return playAgain;
             }
             else
@@ -383,7 +316,7 @@ namespace TicTacToe
         {
             if (turnsTaken == 9)
             {
-                Console.WriteLine("Game Over No More Moves Available!");
+                Console.WriteLine(" Game Over No More Moves Available!");
                 return 3;
             }
             return 0;
@@ -443,22 +376,23 @@ namespace TicTacToe
 
         private static void printBoard()
         {
+            Console.WriteLine(" ");
             for (int i = 0; i < 9; i++)
             {
                 //Print an X or O for each square
-                //0 = unoccupied, 1 = player one (X), 2 = player two (O)
+                //0 = unoccupied 
 
                 if (board[i] == 0)
                 {
-                    Console.Write(".");
+                    Console.Write("   .   ");
                 }
                 if (board[i] == 8)
                 {
-                    Console.Write("X");
+                    Console.Write("   X   ");
                 }
                 if (board[i] == 9)
                 {
-                    Console.Write("O");
+                    Console.Write("   O   ");
                 }
 
                 //Print a new line every 3rd character
@@ -467,6 +401,18 @@ namespace TicTacToe
                     Console.WriteLine();
                 }
             }
+        }
+
+        private static void printKeyBoard()
+        {
+            Console.WriteLine(" Use the following key for gameboard position input.");
+            Console.WriteLine();
+            Console.WriteLine("  0  |  1  |  2  ");
+            Console.WriteLine("-----+-----+-----");
+            Console.WriteLine("  3  |  4  |  5  ");
+            Console.WriteLine("-----+-----+-----");
+            Console.WriteLine("  6  |  7  |  8  ");
+            Console.WriteLine();
         }
     }
 }
