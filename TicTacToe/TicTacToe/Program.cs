@@ -6,7 +6,7 @@ namespace TicTacToe
     class Program
     {
         static int gamesTied = 0, gamesComputerWon = 0, gamesPlayerWon = 0, computerInput = 0, playerInput = 0, playerTurn = 3, computerTurn = -1, userTurn = -1, turnsTaken = 0;
-        static string playAgain = "y", input = "", exit = "q";
+        static string playAgain = "y", input = "", exit = "q", playerSymbol = "X", computerSymbol = "O";
         static int[] board = new int[9];
         
         static void Main(string[] args)
@@ -20,7 +20,7 @@ namespace TicTacToe
 
             Random rand = new Random();
 
-            string validInfo, playerSymbol = "X", computerSymbol = "O";
+            string validInfo; //playerSymbol = "X", computerSymbol = "O";
             bool isInRange = false;
 
             do
@@ -35,6 +35,8 @@ namespace TicTacToe
                         isInRange = int.TryParse(validInfo, out playerTurn);
                         while (!isInRange || playerTurn < 1 || playerTurn > 2)
                         {
+                            Console.Clear();
+                            welcomeSign();
                             playerTurn = 3;
                             Console.WriteLine(" Invalid entry! ");
                             Console.WriteLine(" Would you like to play first or second please enter 1 or 2.");
@@ -49,6 +51,8 @@ namespace TicTacToe
                         isInRange = int.TryParse(validInfo, out playerInput);
                         while (!isInRange || playerInput <= 7 || playerInput >= 10)
                         {
+                            Console.Clear();
+                            welcomeSign();
                             playerInput = 0;
                             Console.WriteLine(" Invalid entry! ");
                             Console.WriteLine(" What symbol would you like to use press 8 for 'X' or 9 for 'O'.");
@@ -79,10 +83,7 @@ namespace TicTacToe
 
                         while (checkForWinner() == 0 && playerInput == 8 || playerInput == 9)
                         {
-                            Console.WriteLine(" ");
-                            Console.WriteLine(" USER symbol: " + playerSymbol + "          SYSTEM symbol: " + computerSymbol);
-                            Console.WriteLine(" ");
-                            printKeyBoard();
+                            reprintEntryGameBoard();
                             if (playerTurn == 1)
                             {
                                 while (userTurn == -1 || board[userTurn] != 0 && exit != input)
@@ -133,6 +134,7 @@ namespace TicTacToe
                                             isNumber = int.TryParse(input, out userTurn);
                                             while (!isNumber || userTurn < 0 || userTurn > 8)
                                             {
+                                                reprintEntryGameBoard();
                                                 userTurn = -1;
                                                 Console.WriteLine(" Invalid entry! ");
                                                 Console.WriteLine(" Please enter a number from 0 to 8 or press the q key and enter to exit.");
@@ -146,6 +148,7 @@ namespace TicTacToe
                                             }
                                             while (board[userTurn] != 0)
                                             {
+                                                reprintEntryGameBoard();
                                                 Console.WriteLine(" ");
                                                 Console.WriteLine(" Space " + userTurn +" is already occupied, try again");
                                                 Console.WriteLine(" ");
@@ -157,6 +160,21 @@ namespace TicTacToe
                                                     return;
                                                 }
                                                 isNumber = int.TryParse(input, out userTurn);
+                                                while (!isNumber || userTurn < 0 || userTurn > 8)
+                                                {
+                                                    reprintEntryGameBoard();
+                                                    Console.WriteLine(" ");
+                                                    Console.WriteLine(" Invalid entry, try again");
+                                                    Console.WriteLine(" ");
+                                                    Console.WriteLine(" Please enter a number from 0 to 8 or press the q key and enter to exit.");
+                                                    input = Console.ReadLine();
+                                                    if (exit == input.ToLower())
+                                                    {
+                                                        endGameResults();
+                                                        return;
+                                                    }
+                                                    isNumber = int.TryParse(input, out userTurn);
+                                                }
                                             }
                                         }
                                     }
@@ -189,6 +207,7 @@ namespace TicTacToe
                                             endGameResults();
                                             return;
                                         }
+                                        
                                     }
                                     if (checkForDraw() == 3)
                                     {
@@ -242,6 +261,15 @@ namespace TicTacToe
             } while (playAgain == "y");
         }
 
+        private static void reprintEntryGameBoard()
+        {
+            Console.Clear();
+            printBoard();
+            Console.WriteLine(" ");
+            Console.WriteLine(" USER symbol: " + playerSymbol + "          SYSTEM symbol: " + computerSymbol);
+            Console.WriteLine(" ");
+            printKeyBoard();
+        }
         private static void welcomeSign()
         {
             Console.WriteLine(" ");
