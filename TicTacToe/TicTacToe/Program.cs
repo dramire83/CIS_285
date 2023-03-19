@@ -5,18 +5,8 @@ namespace TicTacToe
 {
     class Program
     {
-        static int gamesTied = 0;
-        static int gamesComputerWon = 0;
-        static int gamesPlayerWon = 0;
-        static int computerInput = 0;
-        static int playerInput = 0;
-        static int playerTurn = 3;
-        static int computerTurn = -1;
-        static int userTurn = -1;
-        static string playAgain = "y";
-        static string input = "";
-        static string exit = "q";
-        static int turnsTaken = 0;
+        static int gamesTied = 0, gamesComputerWon = 0, gamesPlayerWon = 0, computerInput = 0, playerInput = 0, playerTurn = 3, computerTurn = -1, userTurn = -1, turnsTaken = 0;
+        static string playAgain = "y", input = "", exit = "q";
         static int[] board = new int[9];
         
         static void Main(string[] args)
@@ -29,10 +19,9 @@ namespace TicTacToe
             }
 
             Random rand = new Random();
-            string validInfo;
+
+            string validInfo, playerSymbol = "X", computerSymbol = "O";
             bool isInRange = false;
-            string playerSymbol = "X";
-            string computerSymbol = "O";
 
             do
             {
