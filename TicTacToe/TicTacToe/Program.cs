@@ -6,9 +6,9 @@ namespace TicTacToe
     class Program
     {
         static int gamesTied = 0, gamesComputerWon = 0, gamesPlayerWon = 0, computerInput = 0, playerInput = 0, playerTurn = 3, computerTurn = -1, userTurn = -1, turnsTaken = 0;
-        static string playAgain = "y", input = "", exit = "q", playerSymbol = "X", computerSymbol = "O";
+        static string playAgain = "y", input = "", exit = "q", playerSymbol = "X", computerSymbol = "O", validInfo = "";
         static int[] board = new int[9];
-        
+        static bool isInRange = false;
         static void Main(string[] args)
         {
 
@@ -20,61 +20,27 @@ namespace TicTacToe
 
             Random rand = new Random();
 
-            string validInfo; //playerSymbol = "X", computerSymbol = "O";
-            bool isInRange = false;
-
             do
             {
-                //anotherGame();
                 while (playerTurn == 3)
                 {
                     welcomeSign();
+                    turnChosen();
                     playerInput = 0;
-                    Console.WriteLine(" Would you like to play first or second please enter 1 or 2.");
-                    validInfo = Console.ReadLine();
-                        isInRange = int.TryParse(validInfo, out playerTurn);
-                        while (!isInRange || playerTurn < 1 || playerTurn > 2)
-                        {
-                            Console.Clear();
-                            welcomeSign();
-                            playerTurn = 3;
-                            Console.WriteLine(" Invalid entry! ");
-                            Console.WriteLine(" Would you like to play first or second please enter 1 or 2.");
-                            validInfo = Console.ReadLine();
-                            isInRange = int.TryParse(validInfo, out playerTurn);
-                        }
-                    
+
                     while (playerInput == 0)
                     {
-                        Console.WriteLine(" What symbol would you like to use press 8 for 'X' or 9 for 'O'.");
-                        validInfo = Console.ReadLine();
-                        isInRange = int.TryParse(validInfo, out playerInput);
-                        while (!isInRange || playerInput <= 7 || playerInput >= 10)
-                        {
-                            Console.Clear();
-                            welcomeSign();
-                            playerInput = 0;
-                            Console.WriteLine(" Invalid entry! ");
-                            Console.WriteLine(" What symbol would you like to use press 8 for 'X' or 9 for 'O'.");
-                            validInfo = Console.ReadLine();
-                            isInRange = int.TryParse(validInfo, out playerInput);
-                        }
-                        if (playerInput == 8)
-                        {
-                            computerInput = 9;
-                        }
-                        else
-                        {
-                            computerInput = 8;
-                        }
+                        symbolChosen();
 
                         if (playerInput == 8)
                         {
+                            computerInput = 9;
                             playerSymbol = "X";
                             computerSymbol = "O";
                         }
                         else
                         {
+                            computerInput = 8;
                             playerSymbol = "O";
                             computerSymbol = "X";
                         }
@@ -148,34 +114,35 @@ namespace TicTacToe
                                             }
                                             while (board[userTurn] != 0)
                                             {
-                                                reprintEntryGameBoard();
-                                                Console.WriteLine(" ");
-                                                Console.WriteLine(" Space " + userTurn +" is already occupied, try again");
-                                                Console.WriteLine(" ");
-                                                Console.WriteLine(" Please enter a number from 0 to 8 or press the q key and enter to exit.");
-                                                input = Console.ReadLine();
-                                                if (exit == input.ToLower())
-                                                {
-                                                    endGameResults();
-                                                    return;
-                                                }
-                                                isNumber = int.TryParse(input, out userTurn);
-                                                while (!isNumber || userTurn < 0 || userTurn > 8)
-                                                {
-                                                    reprintEntryGameBoard();
-                                                    Console.WriteLine(" ");
-                                                    Console.WriteLine(" Invalid entry, try again");
-                                                    Console.WriteLine(" ");
-                                                    Console.WriteLine(" Please enter a number from 0 to 8 or press the q key and enter to exit.");
-                                                    input = Console.ReadLine();
-                                                    if (exit == input.ToLower())
-                                                    {
-                                                        endGameResults();
-                                                        return;
-                                                    }
-                                                    isNumber = int.TryParse(input, out userTurn);
-                                                }
+                                                 reprintEntryGameBoard();
+                                                 Console.WriteLine(" ");
+                                                 Console.WriteLine(" Space " + userTurn + " is already occupied, try again");
+                                                 Console.WriteLine(" ");
+                                                 Console.WriteLine(" Please enter a number from 0 to 8 or press the q key and enter to exit.");
+                                                 input = Console.ReadLine();
+                                                 if (exit == input.ToLower())
+                                                 {
+                                                     endGameResults();
+                                                     return;
+                                                 }
+                                                 isNumber = int.TryParse(input, out userTurn);
+                                                 while (!isNumber || userTurn < 0 || userTurn > 8)
+                                                 {
+                                                     reprintEntryGameBoard();
+                                                     Console.WriteLine(" ");
+                                                     Console.WriteLine(" Invalid entry, try again");
+                                                     Console.WriteLine(" ");
+                                                     Console.WriteLine(" Please enter a number from 0 to 8 or press the q key and enter to exit.");
+                                                     input = Console.ReadLine();
+                                                     isNumber = int.TryParse(input, out userTurn);
+                                                     if (exit == input.ToLower())
+                                                     {
+                                                         endGameResults();
+                                                         return;
+                                                     }
+                                                 }
                                             }
+                                            
                                         }
                                     }
                                 }
@@ -261,6 +228,40 @@ namespace TicTacToe
             } while (playAgain == "y");
         }
 
+        private static int symbolChosen()
+        {
+            Console.WriteLine(" What symbol would you like to use press 8 for 'X' or 9 for 'O'.");
+            validInfo = Console.ReadLine();
+            isInRange = int.TryParse(validInfo, out playerInput);
+            while (!isInRange || playerInput <= 7 || playerInput >= 10)
+            {
+                Console.Clear();
+                welcomeSign();
+                playerInput = 0;
+                Console.WriteLine(" Invalid entry! ");
+                Console.WriteLine(" What symbol would you like to use press 8 for 'X' or 9 for 'O'.");
+                validInfo = Console.ReadLine();
+                isInRange = int.TryParse(validInfo, out playerInput);
+            }
+            return playerInput;
+        }
+        private static int turnChosen()
+        {
+            Console.WriteLine(" Would you like to play first or second please enter 1 or 2.");
+            validInfo = Console.ReadLine();
+            isInRange = int.TryParse(validInfo, out playerTurn);
+            while (!isInRange || playerTurn < 1 || playerTurn > 2)
+            {
+                Console.Clear();
+                welcomeSign();
+                playerTurn = 3;
+                Console.WriteLine(" Invalid entry! ");
+                Console.WriteLine(" Would you like to play first or second please enter 1 or 2.");
+                validInfo = Console.ReadLine();
+                isInRange = int.TryParse(validInfo, out playerTurn);
+            }
+            return playerTurn;
+        }
         private static void reprintEntryGameBoard()
         {
             Console.Clear();
@@ -314,7 +315,6 @@ namespace TicTacToe
 
         private static string anotherGame()
         {
-            bool isStringForm;
             Console.WriteLine(" Would you like to play again? y/n ");
             input = Console.ReadLine();
             playAgain = input.ToLower();
