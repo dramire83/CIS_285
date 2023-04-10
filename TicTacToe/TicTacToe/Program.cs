@@ -350,8 +350,8 @@ namespace TicTacToe
 
         private static int checkForWinner()
         {
-            //top row
-            if (board[0] == board[1] && board[1] == board[2])
+            //top row, first column, first diagnal
+            if ((board[0] == board[1] && board[1] == board[2]) || (board[0] == board[3] && board[3] == board[6]) || (board[0] == board[4] && board[4] == board[8]))
             {
                 return board[0];
             }
@@ -368,32 +368,14 @@ namespace TicTacToe
                 return board[6];
             }
 
-            //first column
-            if (board[0] == board[3] && board[3] == board[6])
-            {
-                return board[0];
-            }
-
             //second column
             if (board[1] == board[4] && board[4] == board[7])
             {
                 return board[1];
             }
 
-            //third column
-            if (board[2] == board[5] && board[5] == board[8])
-            {
-                return board[2];
-            }
-
-            //first diagnal
-            if (board[0] == board[4] && board[4] == board[8])
-            {
-                return board[0];
-            }
-
-            //second diagnal
-            if (board[2] == board[4] && board[4] == board[6])
+            //third column, second diagnol
+            if ((board[2] == board[5] && board[5] == board[8]) || (board[2] == board[4] && board[4] == board[6]))
             {
                 return board[2];
             }
