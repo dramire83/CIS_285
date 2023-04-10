@@ -257,34 +257,18 @@ namespace TicTacToe
                 }
             }
             return playerInput;
-            /**isInRange = int.TryParse(validInfo, out playerInput);
-            while (!isInRange || playerInput <= 7 || playerInput >= 10)
-            {
-                Console.Clear();
-                welcomeSign();
-                playerInput = 0;
-                Console.WriteLine(" Invalid entry! ");
-                Console.WriteLine(" What symbol would you like to use press 8 for 'X' or 9 for 'O'.");
-                validInfo = Console.ReadLine();
-                isInRange = int.TryParse(validInfo, out playerInput);
-            }
-            return playerInput;**/
         }
         private static int turnChosen()
         {
-            Console.WriteLine(" Would you like to play first or second please enter 1 or 2.");
-            validInfo = Console.ReadLine();
-            isInRange = int.TryParse(validInfo, out playerTurn);
-            while (!isInRange || playerTurn < 1 || playerTurn > 2)
+            do
             {
                 Console.Clear();
                 welcomeSign();
                 playerTurn = 3;
-                Console.WriteLine(" Invalid entry! ");
                 Console.WriteLine(" Would you like to play first or second please enter 1 or 2.");
                 validInfo = Console.ReadLine();
                 isInRange = int.TryParse(validInfo, out playerTurn);
-            }
+            } while (!isInRange || playerTurn < 1 || playerTurn > 2);
             return playerTurn;
         }
         private static void reprintEntryGameBoard()
