@@ -6,7 +6,7 @@ namespace TicTacToe
     class Program
     {
         static int gamesTied = 0, gamesComputerWon = 0, gamesPlayerWon = 0, computerInput = 0, playerInput = 0, playerTurn = 3, computerTurn = -1, userTurn = -1, turnsTaken = 0;
-        static string playAgain = "y", input = "", exit = "q", playerSymbol = "X", computerSymbol = "O", validInfo = "";
+        static string playAgain = "y", input = "", exit = "q", playerSymbol = "X", computerSymbol = "O", validInfo = "", playerChosenSymbol = "";
         static int[] board = new int[9];
         static bool isInRange = false;
         static void Main(string[] args)
@@ -230,9 +230,34 @@ namespace TicTacToe
 
         private static int symbolChosen()
         {
-            Console.WriteLine(" What symbol would you like to use press 8 for 'X' or 9 for 'O'.");
+            Console.WriteLine(" What symbol would you like to use 'X' or 'O'.");
             validInfo = Console.ReadLine();
-            isInRange = int.TryParse(validInfo, out playerInput);
+            playerChosenSymbol = validInfo.ToLower();
+            while (playerInput == 0)
+            {
+                if (playerChosenSymbol == "x")
+                {
+                    playerInput = 8;
+                    return playerInput;
+                }
+                else if (playerChosenSymbol == "o")
+                {
+                    playerInput = 9;
+                    return playerInput;
+                }
+                else
+                {
+                    Console.Clear();
+                    welcomeSign();
+                    playerInput = 0;
+                    Console.WriteLine(" Invalid entry! ");
+                    Console.WriteLine(" What symbol would you like to use 'X' or 'O'.");
+                    validInfo = Console.ReadLine();
+                    playerChosenSymbol = validInfo.ToLower();
+                }
+            }
+            return playerInput;
+            /**isInRange = int.TryParse(validInfo, out playerInput);
             while (!isInRange || playerInput <= 7 || playerInput >= 10)
             {
                 Console.Clear();
@@ -243,7 +268,7 @@ namespace TicTacToe
                 validInfo = Console.ReadLine();
                 isInRange = int.TryParse(validInfo, out playerInput);
             }
-            return playerInput;
+            return playerInput;**/
         }
         private static int turnChosen()
         {
