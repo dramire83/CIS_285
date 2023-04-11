@@ -6,7 +6,7 @@ namespace TicTacToe
     class Program
     {
         static int gamesTied = 0, gamesComputerWon = 0, gamesPlayerWon = 0, computerInput = 0, playerInput = 0, playerTurn = 3, computerTurn = -1, userTurn = -1, turnsTaken = 0;
-        static string playAgain = "y", input = "", exit = "q", playerSymbol = "X", computerSymbol = "O", validInfo = "", playerChosenSymbol = "";
+        static string playAgain = "y", input = "", exit = "q", playerSymbol = "X", computerSymbol = "O", validInfo = "", playerChosenSymbol = "", startGame = "", gameState = "";
         static int[] board = new int[9];
         static bool isInRange = false;
         static void Main(string[] args)
@@ -22,17 +22,23 @@ namespace TicTacToe
 
             do
             {
-                while (playerTurn == 3)
+                gameMenu();
+                if (exit == input)
                 {
+                    return;
+                }
+                while (playerTurn == 3 && gameState == "y")
+                {
+                    Console.Clear();
                     welcomeSign();
                     turnChosen();
                     playerInput = 0;
 
-                    while (playerInput == 0)
+                    while (playerInput == 0 && gameState == "y")
                     {
                         symbolChosen();
 
-                        if (playerInput == 8)
+                        if (playerInput == 8 && gameState == "y")
                         {
                             computerInput = 9;
                             playerSymbol = "X";
@@ -47,18 +53,18 @@ namespace TicTacToe
                         Console.Clear();
 
 
-                        while (checkForWinner() == 0 && playerInput == 8 || playerInput == 9)
+                        while (checkForWinner() == 0 && playerInput == 8 || playerInput == 9 && gameState == "y")
                         {
                             reprintEntryGameBoard();
-                            if (playerTurn == 1)
+                            if (playerTurn == 1 && gameState != "")
                             {
-                                while (userTurn == -1 || board[userTurn] != 0 && exit != input)
+                                while (userTurn == -1 || board[userTurn] != 0 && exit != input && gameState == "y")
                                 {
 
                                     bool isNumber = false;
-                                    while (!isNumber)
+                                    while (!isNumber && gameState == "y")
                                     {
-                                        if (checkForWinner() != 0)
+                                        if (checkForWinner() != 0 && gameState == "y")
                                         {
                                             printBoard();
                                             Console.WriteLine(" ");
@@ -69,11 +75,12 @@ namespace TicTacToe
                                             if (playAgain == "n")
                                             {
                                                 endGameResults();
+                                                gameState = "";
                                                 return;
                                             }
                                         }
 
-                                        if (checkForDraw() == 3)
+                                        if (checkForDraw() == 3 && gameState == "y")
                                         {
                                             printBoard();
                                             Console.WriteLine(" ");
@@ -84,21 +91,23 @@ namespace TicTacToe
                                             if (playAgain == "n")
                                             {
                                                 endGameResults();
+                                                gameState = "";
                                                 return;
                                             }
                                         }
-                                        if (checkForWinner() == 0)
+                                        if (checkForWinner() == 0 && gameState == "y")
                                         {
                                             isNumber = true;
                                             Console.WriteLine(" Please enter a number from 0 to 8 or press the q key and enter to exit.");
                                             input = Console.ReadLine();
                                             if (exit == input.ToLower())
                                             {
+                                                gameState = "";
                                                 endGameResults();
                                                 return;
                                             }
                                             isNumber = int.TryParse(input, out userTurn);
-                                            while (!isNumber || userTurn < 0 || userTurn > 8)
+                                            while (!isNumber || userTurn < 0 || userTurn > 8 && gameState == "y")
                                             {
                                                 reprintEntryGameBoard();
                                                 userTurn = -1;
@@ -109,10 +118,11 @@ namespace TicTacToe
                                                 if (exit == input.ToLower())
                                                 {
                                                     endGameResults();
+                                                    gameState = "";
                                                     return;
                                                 }
                                             }
-                                            while (board[userTurn] != 0)
+                                            while (board[userTurn] != 0 && gameState == "y")
                                             {
                                                  reprintEntryGameBoard();
                                                  Console.WriteLine(" ");
@@ -123,10 +133,11 @@ namespace TicTacToe
                                                  if (exit == input.ToLower())
                                                  {
                                                      endGameResults();
+                                                     gameState = "";
                                                      return;
                                                  }
                                                  isNumber = int.TryParse(input, out userTurn);
-                                                 while (!isNumber || userTurn < 0 || userTurn > 8)
+                                                 while (!isNumber || userTurn < 0 || userTurn > 8 && gameState == "y")
                                                  {
                                                      reprintEntryGameBoard();
                                                      Console.WriteLine(" ");
@@ -138,15 +149,16 @@ namespace TicTacToe
                                                      if (exit == input.ToLower())
                                                      {
                                                          endGameResults();
+                                                         gameState = "";
                                                          return;
-                                                     }
+                                                    }
                                                  }
                                             }
                                             
                                         }
                                     }
                                 }
-                                if (checkForWinner() == 0)
+                                if (checkForWinner() == 0 && gameState == "y")
                                 {
                                     Console.WriteLine(" You typed " + userTurn);
                                     board[userTurn] = playerInput;
@@ -156,12 +168,12 @@ namespace TicTacToe
                                 }
                                 Console.Clear();
                             }
-                            if (playerTurn == 2)
+                            if (playerTurn == 2 && gameState == "y")
                             {
                                 //don't allow computer to pick invalid number
-                                while (computerTurn == -1 || board[computerTurn] != 0 && exit != input)
+                                while (computerTurn == -1 || board[computerTurn] != 0 && exit != input && gameState == "y")
                                 {
-                                    if (checkForWinner() != 0)
+                                    if (checkForWinner() != 0 && gameState == "y")
                                     {
                                         printBoard();
                                         Console.WriteLine(" ");
@@ -172,11 +184,12 @@ namespace TicTacToe
                                         if (playAgain == "n")
                                         {
                                             endGameResults();
+                                            gameState = "";
                                             return;
                                         }
                                         
                                     }
-                                    if (checkForDraw() == 3)
+                                    if (checkForDraw() == 3 && gameState == "y")
                                     {
                                         Console.Clear();
                                         printBoard();
@@ -188,21 +201,22 @@ namespace TicTacToe
                                         if (playAgain == "n")
                                         {
                                             endGameResults();
+                                            gameState = "";
                                             return;
                                         }
                                     }
-                                    if (checkForWinner() == 0 && computerInput == 8 || computerInput == 9)
+                                    if (checkForWinner() == 0 && computerInput == 8 || computerInput == 9 && gameState == "y")
                                     {
                                         computerTurn = rand.Next(9);
                                         Console.WriteLine(" Computer chooses " + computerTurn);
                                     }
                                 }
-                                if (checkForWinner() == 0 && computerInput == 8 || computerInput == 9)
+                                if (checkForWinner() == 0 && computerInput == 8 || computerInput == 9 && gameState == "y")
                                 {
                                     board[computerTurn] = computerInput;
                                     turnsTaken++;
                                 }
-                                if (checkForWinner() != 0)
+                                if (checkForWinner() != 0 && gameState == "y")
                                 {
                                     printBoard();
                                     Console.WriteLine(" ");
@@ -213,10 +227,11 @@ namespace TicTacToe
                                     if (playAgain == "n")
                                     {
                                         endGameResults();
+                                        gameState = "";
                                         return;
                                     }
                                 }
-                                if (checkForWinner() == 0 && computerInput == 8 || computerInput == 9)
+                                if (checkForWinner() == 0 && computerInput == 8 || computerInput == 9 && gameState == "y")
                                 {
                                     printBoard();
                                     playerTurn--;
@@ -226,6 +241,36 @@ namespace TicTacToe
                     }
                 }
             } while (playAgain == "y");
+        }
+        private static string gameMenu()
+        {
+            do
+            {
+                Console.Clear();
+                welcomeSign();
+                Console.WriteLine("               ******  MAIN MENU  ******");
+                Console.WriteLine(" ");
+                Console.WriteLine("     Welcome, would you like to play tic tac toe y/n?");
+                startGame = Console.ReadLine();
+                gameState = startGame.ToLower();
+                if (gameState == "y")
+                {
+                    return input;
+                }
+                else if (gameState == "n")
+                {
+                    Console.WriteLine("Have a great day!");
+                    input = "q";
+                    return input;
+                }
+                else
+                {
+                    startGame = "";
+                    Console.WriteLine("Invalid Entry, Try Again.");
+                }
+
+            } while (startGame == "");
+            return gameState;
         }
 
         private static int symbolChosen()
