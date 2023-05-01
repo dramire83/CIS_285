@@ -239,6 +239,7 @@ namespace TicTacToe
         }
 
         //gameMenu method to Display welcome sign and verify if player would like to play game.
+        //returns gameState string variable to show if the player would like to play tic tac toe.
         private static string gameMenu()
         {
             do
@@ -271,6 +272,7 @@ namespace TicTacToe
         }
 
         //symbolChosen method gets the user input to choose either "X" or "O".
+        //returns playerInput int variable which will be used to assign the chosen symbol.
         private static int symbolChosen()
         {
             Console.WriteLine(" What symbol would you like to use 'X' or 'O'.");
@@ -303,6 +305,7 @@ namespace TicTacToe
         }
 
         //turnChosen method allows the user to go either 1st or 2nd.
+        //returns playerTurn int variable to show whether the player chose to go 1st or 2nd.
         private static int turnChosen()
         {
             do
@@ -377,6 +380,7 @@ namespace TicTacToe
         }
 
         //anotherGame method gets user input to play another game.
+        //returns either playAgain string variable or "n" which be used to see if the player would like to keep playing the game.
         private static string anotherGame()
         {
             Console.WriteLine(" Would you like to play again? y/n ");
@@ -394,6 +398,7 @@ namespace TicTacToe
         }
 
         //checkForDraw method checks to see if game ends in draw.
+        //returns int value of 3 that will be used to check if there are moves left or 0 if the game still has available moves.
         private static int checkForDraw()
         {
             if (turnsTaken == 9)
@@ -405,6 +410,8 @@ namespace TicTacToe
         }
 
         //checkForWinner method checks to see if game ends in a winner.
+        //returns int value of 0 if a winner has not been found yet or the player
+        //that occupies board[0], board[3], board[6], board[1], or board[2] if game won condition is met.
         private static int checkForWinner()
         {
             //top row, first column, first diagnal
