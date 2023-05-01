@@ -64,14 +64,20 @@ namespace TicTacToe
         //gameTurn method passes two variables by value to run different code depending on either first or second turn chosen.
         private static void gameTurn(int _playerTurn, Random _rand)
         { 
+            //Declares variable playerTurn to be set to _playerTurn passed value.
             playerTurn = _playerTurn;
+
+            //If player chose to go first exectute this block first.
             if (playerTurn == 1)
             {
+                //As long as the player or computer hasn't gone and there are empty spaces execute this block.
                 while (userTurn == -1 || board[userTurn] != 0)
                 {
                     bool isNumber = false;
+                    //While loop executes as long as isNumber is false.
                     while (!isNumber)
                     {
+                        //Check to see if there is a winner before the player starts and if so computer has won.
                         if (checkForWinner() != 0)
                         {
                             printBoard();
@@ -82,6 +88,7 @@ namespace TicTacToe
                             anotherGame();
                             endGame(exit, input, playAgain);
                         }
+                        //Check to see if there are still spaces available and if so asks for user input.
                         if (checkForWinner() == 0)
                         {
                             isNumber = true;
@@ -89,6 +96,7 @@ namespace TicTacToe
                             input = Console.ReadLine();
                             endGame(exit, input, playAgain);
                             isNumber = int.TryParse(input, out userTurn);
+                            //While loop to validate the user input or to exit game.
                             while (!isNumber || userTurn < 0 || userTurn > 8)
                             {
                                 reprintEntryGameBoard();
@@ -99,6 +107,7 @@ namespace TicTacToe
                                 isNumber = int.TryParse(input, out userTurn);
                                 endGame(exit, input, playAgain);
                             }
+                            //While loop to check to see if the space selected by user is already occupied.
                             while (board[userTurn] != 0)
                             {
                                 reprintEntryGameBoard();
@@ -109,6 +118,7 @@ namespace TicTacToe
                                 input = Console.ReadLine();
                                 endGame(exit, input, playAgain);
                                 isNumber = int.TryParse(input, out userTurn);
+                                //While loop to validate the user input or to exit game.
                                 while (!isNumber || userTurn < 0 || userTurn > 8)
                                 {
                                     reprintEntryGameBoard();
@@ -125,6 +135,7 @@ namespace TicTacToe
                         }
                     }
                 }
+                //Check to see if there is a winner if not then places the users choice into the board and increases the turns taken variable.
                 if (checkForWinner() == 0)
                 {
                     Console.WriteLine(" You typed " + userTurn);
@@ -134,6 +145,7 @@ namespace TicTacToe
                     playerTurn++;
                 }
                 Console.Clear();
+                //Checks to see if there is a draw and also asks if player wants to play a new game.
                 if (checkForDraw() == 3)
                 {
                     printBoard();
@@ -145,12 +157,15 @@ namespace TicTacToe
                     endGame(exit, input, playAgain);
                 }
             }
+
+            //If player chose to go second execute this block first.
             if (playerTurn == 2)
             {
                 //don't allow computer to pick invalid number
                 while (computerTurn == -1 || board[computerTurn] != 0)
                 {
-                    if (checkForWinner() != 0 && gameState == "y")
+                    //check to see if player wins before computers turn also asks if player wants to play a new game.
+                    if (checkForWinner() != 0)
                     {
                         printBoard();
                         Console.WriteLine(" ");
@@ -161,17 +176,20 @@ namespace TicTacToe
                         endGame(exit, input, playAgain);
 
                     }
+                    //check to see if there is still availalble moves and if so selects the computers choice at random.
                     if (checkForWinner() == 0 && computerInput == 8 || computerInput == 9)
                     {
                         computerTurn = _rand.Next(9);
                         Console.WriteLine(" Computer chooses " + computerTurn);
                     }
                 }
+                //check for winner and then places computers choice into the board and also increases the turns taken variable
                 if (checkForWinner() == 0 && computerInput == 8 || computerInput == 9)
                 {
                     board[computerTurn] = computerInput;
                     turnsTaken++;
                 }
+                //check to see if there is a winner after computers choice and if so computer wins is printed.
                 if (checkForWinner() != 0)
                 {
                     printBoard();
@@ -182,11 +200,13 @@ namespace TicTacToe
                     anotherGame();
                     endGame(exit, input, playAgain);
                 }
+                //check to see if space is still available after computer turn if so then show the board and change turns for player's turn.
                 if (checkForWinner() == 0 && computerInput == 8 || computerInput == 9)
                 {
                     printBoard();
                     playerTurn--;
                 }
+                //check to see if draw condition is met before player goes but after computer goes.
                 if (checkForDraw() == 3)
                 {
                     printBoard();
